@@ -1,10 +1,12 @@
+import os
 import requests
 from twilio.rest import  Client
+from twilio.http.http_client import TwilioHttpClient
 
 OWM_Endpoint = "https://api.openweathermap.org/data/2.5/forecast"
-api_key = "9506685727831be970868c9e9e1fd37f"
+api_key = os.environ.get("OPEN_OWM_API_KEY")
 account_sid = "AC8ca630870f598d7dadf9943f1558ea0b"
-auth_token = "62d9375fa16fba2685add9cd22fe3efc"
+auth_token = os.environ.get("AUTH_TOKEN")
 
 weather_params = {
     "lat": -21.176630,
@@ -24,7 +26,10 @@ for hour in data["list"]:
         need_umbrella = True
 
 if need_umbrella:
-    client = Client(account_sid, auth_token)
+    proxy_client = TwilioHttpClient()
+    proxy_client.session.proxies = {'https': os.environ['https_proxy']}
+
+    client = Client(account_sid, auth_token, http_client=proxy_client)
     message = client.messages.create(
         from_= 'whatsapp:+14155238886',
         to='whatsapp:+19515501344',
