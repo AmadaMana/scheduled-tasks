@@ -5,7 +5,7 @@ from twilio.http.http_client import TwilioHttpClient
 
 OWM_Endpoint = "https://api.openweathermap.org/data/2.5/forecast"
 api_key = os.environ.get("OPEN_OWM_API_KEY")
-account_sid = "AC8ca630870f598d7dadf9943f1558ea0b"
+account_sid = os.environ.get("ACCOUNT_SID")
 auth_token = os.environ.get("AUTH_TOKEN")
 
 weather_params = {
@@ -36,3 +36,4 @@ if need_umbrella:
         body="It's going to rain today. Remember to bring an ☂️"
     )
     print(message.status)
+
